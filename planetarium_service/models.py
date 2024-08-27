@@ -54,3 +54,20 @@ class Ticket(models.Model):
     seat = models.IntegerField()
     show_session = models.ForeignKey(ShowSession, on_delete=models.CASCADE)
     reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE)
+
+    @staticmethod
+    def validate_ticket(row, seat, planetarium_dome, error_to_raise):
+        for ticket_attr_value, ticket_attr_name, planetarium_dome_attr_name in [
+            (row, "row", "rows"),
+            (seat, "seat", "seats_in_row"),
+        ]:
+            count_attrs = getattr(planetarium_dome, planetarium_dome_attr_name)
+            if not (1 <= ticket_attr_value <= count_attrs):
+                raise error_to_raise(
+                    {
+                        ticket_attr_name: f"{ticket_attr_name} "
+                                          f"number must be in available range: "
+                        f"(1, {planetarium_dome_attr_name}): "
+                        f"(1, {count_attrs})"
+                    }
+                )
