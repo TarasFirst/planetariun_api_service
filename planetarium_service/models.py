@@ -47,3 +47,10 @@ class Reservation(models.Model):
 
     def __str__(self):
         return f"Reservation created {self.created_at}"
+
+
+class Ticket(models.Model):
+    row = models.IntegerField()
+    seat = models.IntegerField()
+    show_session = models.ForeignKey(ShowSession, on_delete=models.CASCADE)
+    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE)
