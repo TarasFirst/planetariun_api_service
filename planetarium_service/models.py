@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -27,3 +28,22 @@ class PlanetariumDome(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ShowSession(models.Model):
+    astronomy_show = models.ForeignKey(AstronomyShow, on_delete=models.CASCADE)
+    planetarium_dome = models.ForeignKey(PlanetariumDome, on_delete=models.CASCADE)
+    show_time = models.DateTimeField()
+
+    def __str__(self):
+        return f"{self.astronomy_show} ({self.planetarium_dome}) {self.show_time}"
+
+
+class Reservation(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f"Reservation created {self.created_at}"
