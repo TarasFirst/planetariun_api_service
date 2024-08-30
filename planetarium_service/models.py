@@ -5,6 +5,7 @@ from django.db import models
 
 class ShowTheme(models.Model):
     name = models.CharField(max_length=255)
+    astronomyshow = models.ManyToManyField("AstronomyShow", blank=True, related_name="astronomyshows")
 
     def __str__(self):
         return self.name
@@ -13,6 +14,7 @@ class ShowTheme(models.Model):
 class AstronomyShow(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
+    showtheme = models.ManyToManyField(ShowTheme, blank=True, related_name="showthemes")
 
     def __str__(self):
         return self.title
