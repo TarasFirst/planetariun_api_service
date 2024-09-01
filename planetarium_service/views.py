@@ -33,9 +33,6 @@ class ShowThemeViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return ShowThemeSerializer
-
-        # if self.action in ["retrieve", "create", "update", "partial_update"]:
-        #     return ShowThemeRetrieveSerializer
         return ShowThemeRetrieveSerializer
 
 
@@ -46,10 +43,7 @@ class AstronomyShowViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return AstronomyShowSerializer
-
         return AstronomyShowRetrieveSerializer
-        # if self.action in ["retrieve", "create", "update", "partial_update"]:
-        #     return ShowThemeRetrieveSerializer
 
 
 class PlanetariumDomeViewSet(viewsets.ModelViewSet):
@@ -64,7 +58,6 @@ class ShowSessionViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return ShowSessionSerializer
-
         return ShowSessionRetrieveSerializer
 
 
