@@ -51,12 +51,15 @@ class Reservation(models.Model):
     def __str__(self):
         return f"Reservation created {self.created_at}"
 
+    class Meta:
+        ordering = ["-created_at"]
+
 
 class Ticket(models.Model):
     row = models.IntegerField()
     seat = models.IntegerField()
-    show_session = models.ForeignKey(ShowSession, on_delete=models.CASCADE)
-    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE)
+    show_session = models.ForeignKey(ShowSession, on_delete=models.CASCADE, related_name="tickets")
+    reservation = models.ForeignKey(Reservation, on_delete=models.CASCADE, related_name="tickets")
 
     @staticmethod
     def validate_ticket(row, seat, planetarium_dome, error_to_raise):
