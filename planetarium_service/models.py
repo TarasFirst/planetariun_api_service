@@ -34,12 +34,12 @@ class PlanetariumDome(models.Model):
 
 
 class ShowSession(models.Model):
-    astronomy_show = models.ForeignKey(AstronomyShow, on_delete=models.CASCADE)
+    astronomyshow = models.ForeignKey(AstronomyShow, on_delete=models.CASCADE)
     planetarium_dome = models.ForeignKey(PlanetariumDome, on_delete=models.CASCADE)
     show_time = models.DateTimeField()
 
     def __str__(self):
-        return f"{self.astronomy_show} ({self.planetarium_dome}) {self.show_time}"
+        return f"{self.astronomyshow} ({self.planetarium_dome}) {self.show_time}"
 
 
 class Reservation(models.Model):
