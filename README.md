@@ -9,18 +9,6 @@ for planetariums with different user permissions.
 
 ![DB_structure_image.png](media/DB_structure_image.png)
 
-## Access to service
-
-### Test user with status: is_staff=True
-### `username:` `user@user.com`
-
-### `password:` `UserTest2024`
-
-
-### Test user with status: is_staff=False
-### `username:` `no_staff@user.com`
-
-### `password:` `UserNoStaff2024`
 
 ## Installing / Getting started
 
