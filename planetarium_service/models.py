@@ -3,23 +3,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 
 
-class ShowTheme(models.Model):
-    name = models.CharField(max_length=255)
-    astronomyshow = models.ManyToManyField("AstronomyShow", blank=True, related_name="astronomyshows")
-
-    def __str__(self):
-        return self.name
-
-
-class AstronomyShow(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    showtheme = models.ManyToManyField(ShowTheme, blank=True, related_name="showthemes")
-
-    def __str__(self):
-        return self.title
-
-
 class PlanetariumDome(models.Model):
     name = models.CharField(max_length=255)
     rows = models.IntegerField()
@@ -33,13 +16,36 @@ class PlanetariumDome(models.Model):
         return self.name
 
 
+class ShowTheme(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+
+class AstronomyShow(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    duration = models.IntegerField()
+    show_themes = models.ManyToManyField(ShowTheme, blank=True)
+
+    class Meta:
+        ordering = ["title"]
+
+    def __str__(self):
+        return self.title
+
+
 class ShowSession(models.Model):
-    astronomyshow = models.ForeignKey(AstronomyShow, on_delete=models.CASCADE)
+    astronomy_show = models.ForeignKey(AstronomyShow, on_delete=models.CASCADE)
     planetarium_dome = models.ForeignKey(PlanetariumDome, on_delete=models.CASCADE)
     show_time = models.DateTimeField()
 
+    class Meta:
+        ordering = ["-show_time"]
+
     def __str__(self):
-        return f"{self.astronomyshow} ({self.planetarium_dome}) {self.show_time}"
+        return f"{self.astronomy_show} ({self.planetarium_dome}) {self.show_time}"
 
 
 class Reservation(models.Model):
@@ -72,7 +78,7 @@ class Ticket(models.Model):
                 raise error_to_raise(
                     {
                         ticket_attr_name: f"{ticket_attr_name} "
-                                          f"number must be in available range: "
+                        f"number must be in available range: "
                         f"(1, {planetarium_dome_attr_name}): "
                         f"(1, {count_attrs})"
                     }
@@ -87,11 +93,11 @@ class Ticket(models.Model):
         )
 
     def save(
-            self,
-            force_insert=False,
-            force_update=False,
-            using=None,
-            update_fields=None
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None
     ):
         self.full_clean()
         return super(Ticket, self).save(
