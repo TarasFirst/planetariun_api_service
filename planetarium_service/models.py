@@ -27,7 +27,11 @@ class AstronomyShow(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
     duration = models.IntegerField()
-    show_themes = models.ManyToManyField(ShowTheme, blank=True)
+    show_themes = models.ManyToManyField(
+        ShowTheme,
+        blank=True,
+        related_name="astronomy_shows",
+    )
 
     class Meta:
         ordering = ["title"]
@@ -37,7 +41,11 @@ class AstronomyShow(models.Model):
 
 
 class ShowSession(models.Model):
-    astronomy_show = models.ForeignKey(AstronomyShow, on_delete=models.CASCADE)
+    astronomy_show = models.ForeignKey(
+        AstronomyShow,
+        on_delete=models.CASCADE,
+        related_name="show_sessions"
+    )
     planetarium_dome = models.ForeignKey(
         PlanetariumDome,
         on_delete=models.CASCADE
@@ -55,7 +63,9 @@ class ShowSession(models.Model):
 class Reservation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reservations"
     )
 
     def __str__(self):
