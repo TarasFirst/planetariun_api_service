@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db.models import F, Count
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 
@@ -98,7 +98,8 @@ class AstronomyShowViewSet(viewsets.ModelViewSet):
             OpenApiParameter(
                 "title",
                 type=OpenApiTypes.STR,
-                description="Filter by astronomy show title (ex. ?title=fiction)",
+                description="Filter by astronomy show title "
+                            "(ex. ?title=fiction)",
             ),
         ]
     )
@@ -112,7 +113,8 @@ class ShowSessionViewSet(viewsets.ModelViewSet):
         .select_related("astronomy_show", "planetarium_dome")
         .annotate(
             tickets_available=(
-                F("planetarium_dome__rows") * F("planetarium_dome__seats_in_row")
+                F("planetarium_dome__rows") *
+                F("planetarium_dome__seats_in_row")
                 - Count("tickets")
             )
         )
@@ -131,7 +133,9 @@ class ShowSessionViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(show_time__date=date)
 
         if astronomy_show_id_str:
-            queryset = queryset.filter(astronomy_show_id=int(astronomy_show_id_str))
+            queryset = queryset.filter(
+                astronomy_show_id=int(astronomy_show_id_str)
+            )
 
         return queryset
 
@@ -149,7 +153,8 @@ class ShowSessionViewSet(viewsets.ModelViewSet):
             OpenApiParameter(
                 "astronomy_show",
                 type=OpenApiTypes.INT,
-                description="Filter by astronomy show id (ex. ?astronomy_show=2)",
+                description="Filter by astronomy show id "
+                            "(ex. ?astronomy_show=2)",
             ),
             OpenApiParameter(
                 "date",

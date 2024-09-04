@@ -9,11 +9,9 @@ for planetariums with different user permissions.
 
 ![DB_structure_image.png](media/DB_structure_image.png)
 
-
 ## Installing / Getting started
 
 ### Python3 must be already installed
-
 
 ## Installing using GitHub
 

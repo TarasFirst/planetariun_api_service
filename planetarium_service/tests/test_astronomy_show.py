@@ -47,7 +47,10 @@ def sample_show_session(**params):
 
 
 def detail_url(astronomy_show_id):
-    return reverse("planetarium_service:astronomyshow-detail", args=[astronomy_show_id])
+    return reverse(
+        "planetarium_service:astronomyshow-detail",
+        args=[astronomy_show_id]
+    )
 
 
 class UnauthenticatedMovieApiTests(TestCase):
@@ -89,20 +92,22 @@ class AuthenticatedMovieApiTests(TestCase):
 
         astronomy_show_1.show_themes.add(show_theme_1)
         astronomy_show_2.show_themes.add(show_theme_2)
-        astronomy_show_3 = sample_astronomy_show(title="Astronomy show without show theme")
-
-        res = self.client.get(
-            ASTRONOMY_SHOW_URL, {"show_themes": f"{show_theme_1.id},{show_theme_2.id}"}
+        astronomy_show_3 = sample_astronomy_show(
+            title="Astronomy show without show theme"
         )
 
-        serializer1 = AstronomyShowListSerializer( astronomy_show_1)
-        serializer2 = AstronomyShowListSerializer( astronomy_show_2)
-        serializer3 = AstronomyShowListSerializer( astronomy_show_3)
+        res = self.client.get(
+            ASTRONOMY_SHOW_URL,
+            {"show_themes": f"{show_theme_1.id},{show_theme_2.id}"}
+        )
+
+        serializer1 = AstronomyShowListSerializer(astronomy_show_1)
+        serializer2 = AstronomyShowListSerializer(astronomy_show_2)
+        serializer3 = AstronomyShowListSerializer(astronomy_show_3)
 
         self.assertIn(serializer1.data, res.data)
         self.assertIn(serializer2.data, res.data)
         self.assertNotIn(serializer3.data, res.data)
-
 
     def test_filter_astronomy_shows_by_title(self):
         astronomy_show_1 = sample_astronomy_show(title="AstronomyShow")
@@ -121,7 +126,9 @@ class AuthenticatedMovieApiTests(TestCase):
 
     def test_retrieve_astronomy_show_detail(self):
         astronomy_show = sample_astronomy_show()
-        astronomy_show.show_themes.add(ShowTheme.objects.create(name="ShowTheme"))
+        astronomy_show.show_themes.add(ShowTheme.objects.create(
+            name="ShowTheme")
+        )
 
         url = detail_url(astronomy_show.id)
         res = self.client.get(url)
